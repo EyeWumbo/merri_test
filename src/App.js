@@ -1,24 +1,28 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
+
+import URLInputPage from './pages/URLInput.jsx';
+import RedirectPage from './pages/Redirect.jsx';
+import AdminPage from './pages/Admin.jsx';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <header>
+          <Link to="/">Home</Link>
+          <Link to="/admin">Admin</Link>
+        </header>
+
+        <Route path="/s/:shortId" render={({match}) => {
+          const url = window.localStorage.getItem(match.params.shortId);
+          return <RedirectPage url={url} />
+        }} />
+        <Route path="/admin" component={AdminPage} />
+        <Route path="/" exact component={URLInputPage} />
+      </Router>
     </div>
   );
 }
